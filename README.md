@@ -5,11 +5,13 @@
 服务端是以Spring Boot+JPA为框架来开发实现的-server
 
 ## 系统主要功能
-<div align=center><img src=“https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/0.png” width=“300” height=“450” /></div>
+<img src=“https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/0.png” width=“300” height=“450” />
 ### 1.登录注册模块的设计与实现
     当用户首次使用本系统时，系统会跳转到注册页面。注册本系统后便成为有效用户，注册需要填写学号，并上传手持学生证正面照，以验证用户为本校学生，在验证通过后即可成为本系统的有效用户。 注册成功后，进入系统时默认以微信的方式登录。
     首次登录时注册界面如图5-4所示。
-    <div align=center><img src=“https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/1.png” width=“300” height=“450” /></div>
+    <div align=center>
+    <img src=“https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/1.png” width=“300” height=“450” />
+    </div>
 #### 登录功能的核心代码:
 ```javascript
 wx.login({ //获取code
