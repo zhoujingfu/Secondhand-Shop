@@ -1,41 +1,130 @@
-<<<<<<< HEAD
-﻿系统介绍
+系统介绍
 ===========================
-本系统的客户端为微信小程序-微信
-本系统的管理端是VUE的渐进式框架-web
+系统的客户端为微信小程序，整体的技术架构比较清晰--weixn
+本系统的管理端是VUE的渐进式框架--web
 服务端是以Spring Boot+JPA为框架来开发实现的-server
-=======
-------- 1 登录注册模块的设计与实现
+
+## 系统主要功能
+https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/0.png
+### 1.登录注册模块的设计与实现
     当用户首次使用本系统时，系统会跳转到注册页面。注册本系统后便成为有效用户，注册需要填写学号，并上传手持学生证正面照，以验证用户为本校学生，在验证通过后即可成为本系统的有效用户。 注册成功后，进入系统时默认以微信的方式登录。
-    1.界面设计
     首次登录时注册界面如图5-4所示。
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/1.png" width="200" height="300" />
-                 图5-4 注册界面图           
-------- 2 闲置信息模块的设计与实现
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/1.png
+#### 登录功能的核心代码:
+```javascript
+wx.login({ //获取code
+      wx.getSetting({
+        if(res.authSetting['scope.userInfo']) { //已授权，直接调用用户基本信息
+          wx.getUserInfo({{// 发送 res.code 到后台换取 openId, sessionKey
+              get('/weChat/getUserInfo', params).then((res) => { //调用接口
+            wx.setStorage({ //缓存用户信息到本地
+         key: "uid",
+    data: res.data.id, 
+     })
+});
+
+```
+#### 注册功能的核心代码如下:
+```javascript
+var formData = {
+      username: e.detail.value.username,
+      password: e.detail.value.password,
+      studenid: e.detail.value.qq,
+      mobile: e.detail.value.mobile,
+    }
+post('/user/register/' + this.data.uid, formData).then((res) => {
+      url: serviceUrl + '/user/images/upload',//身份凭证上传的接口
+            path: that.data.imagesList,//这里是选取的图片的地址数组 
+) });}
+```
+
+### 2.闲置信息模块的设计与实现
     有效用户可以首页浏览闲置信息，在首页的闲置信息模块可以浏览系统中最新发布的闲置信息列表。有效用户可以在首页查看本系统的数据统计，包括有今日通告、总注册人数、总发布数量、总成交量。用户通过查看通告栏可以快速的了解校园动态。用户可以通过点击相应的列表进入闲置信息详情浏览闲置物品的信息。在物品的详情页中，如是用户本人发布的物品则显示“出示二维码”和“删除”按钮。
-    1.界面设计
-    首页的闲置信息列表界面如图所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/2.png" width="200" height="300" /> ，
-    发现页的闲置信息列表如图所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/3.png" width="200" height="300" /> 
-    闲置物品详情界面如图所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/4.png" width="200" height="300" /> 
-      
-------- 3 评论模块的设计与实现
-    有效用户在浏览闲置物品的详情时可以对商品进行评论与卖主沟通，用户可以在商品详情页回复别人的评论以及删除个人评论。用户可以在消息页中查看未读评论、全部评论和回复评论。 
-    1.界面设计
-    商品的评论信息列表界面如图所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/5.png" width="150" height="225" /> 
-    消息页查看和回复评论如图所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/6.png" width="150" height="225" /> 
-------- 4 发布商品模块的设计与实现
-   有效用户可以在系统的首页点击“发布闲置”或者在发现点击绿色的“+”号进行发布商品。用户填写商品信息时采用图文混排的方式，图片的数量的上限为9张，从而能更加清晰的描述商品。有效用户还可以在“我的”中查看发布历史。
-1.	界面设计
-发布商品界面如图5-10所示
-<img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/7.png" width="150" height="225" /> 
-2.功能实现
-    用户发布闲置功能核心代码如下：
-     formData.type = this.data.typeList[formData.type];
+    首页的闲置信息列表界面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/2.png
+    发现页的闲置信息页面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/3.png
+    闲置物品详情界面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/4.png
+    
+#### 闲置列表功能核心代码:
+```javascript
+get('/goods', params).then((res) => {//发起网络请求
+      if (res.statusCode == '200') {
+          if (loadingMore == undefined) {
+            that.setData({ //参数接受对象，以key的形式表示
+              goodsList: res.data.content,
+              pageNum: res.data.number,
+              pageSize: res.data.size,
+              totalPages: res.data.totalPages
+            })
+          } 
+        } 
+      });
+```
+#### 数据统计功能核心代码:
+```javascript
+get('/statistics/userAndGoodsCount', null).then((res) => {
+      if (res.statusCode == '200') {
+        that.setData({
+          user: res.data
+        })
+console.log(res.data)
+      } 
+    });
+get ('/notice/findAll', null).then((res) => {
+      if (res.statusCode == '200') {
+        that.setData({
+          notice: res.data[0]
+        })  
+console.log(res.data)
+    });
+```
+### 3.评论模块的设计与实现
+    有效用户在浏览闲置物品的详情时可以对商品进行评论与卖主沟通，用户可以在商品详情页回复别人的评论以及删除个人评论。用户可以在消息页中查看未读评论、全部评论和回复评论。
+    商品的评论信息列表界面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/5.png
+    消息页查看和回复评论界面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/6.png
+#### 登录功能的核心代码:
+```javascript
+wx.login({ //获取code
+      wx.getSetting({
+        if(res.authSetting['scope.userInfo']) { //已授权，直接调用用户基本信息
+          wx.getUserInfo({{// 发送 res.code 到后台换取 openId, sessionKey
+              get('/weChat/getUserInfo', params).then((res) => { //调用接口
+            wx.setStorage({ //缓存用户信息到本地
+         key: "uid",
+    data: res.data.id, 
+     })
+});
+
+```
+#### 评论功能核心代码:
+```javascript
+get('/comments/user/' + this.data.uid, null).then((res) => {
+      if (res.statusCode == '200') {
+        that.setData({
+          goodsAllComments: res.data  }) }
+    });
+    var params = {
+      content: event.detail.value.content,
+      goodsId: this.data.goodsId,
+      replyCommentId: this.data.commentId  }
+    post('/comment/add/' + this.data.uid + '/reply/' + this.data.replyId, params).then((res) => {
+      if (res.statusCode == '200') {
+        wx.showToast({
+          title: '评论成功',
+        })} 
+    });
+```
+### 4.发布商品模块的设计与实现
+    有效用户可以在系统的首页点击“发布闲置”或者在发现点击绿色的“+”号进行发布商品。用户填写商品信息时采用图文混排的方式，图片的数量的上限为9张，从而能更加清晰的描述商品。有效用户还可以在“我的”中查看发布历史。
+    发布商品界面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/7.png
+#### 用户发布闲置功能核心代码:
+```javascript
+formData.type = this.data.typeList[formData.type];
     post('/goods/publish/'+ this.data.uid, formData).then((res) => {
       wx.showLoading({
         mask: true
@@ -50,23 +139,26 @@
         }
        }
     });
-------- 5关注模块的设计与实现
+
+```
+### 5.关注模块的设计与实现
     有效用户可以在查看已关注用户，搜索关注并关注该用户。关注该用户后，可以在商品的发现页筛选该用户的商品，实时了解该用户的动态。
-1.	界面设计
-已关注界面如图所示
-<img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/8.png" width="150" height="225" /> 
-发现用户并关注如图所示
-<img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/9.png" width="150" height="225" /> 
-2.关注功能的核心代码
-获取已关注列表核心代码：
-    get('/subscribe/getUsers/' + this.data.uid, params).then((res) => {
+    已关注界面如图
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/8.png
+    发现用户并关注
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/9.png
+#### 获取已关注列表核心代码：:
+```javascript
+ get('/subscribe/getUsers/' + this.data.uid, params).then((res) => {
       if (res.statusCode == '200') {
         that.setData({
           statistics: res.data
         })
       } 
     });
-搜索并关注用户核心代码：
+```
+#### 搜索并关注用户核心代码:
+```javascript
 serachUsers: function(e) {
     this.setData({
       nickName: e.detail.value
@@ -80,18 +172,18 @@ serachUsers: function(e) {
          that.getAllUsers();
       }
 }
-------- 6个人中心模块的设计与实现
+```
+### 6.个人中心模块的设计与实现
     个人中心的界面设计采用微信原生风格，有效用户可以在个人中心快捷的查看个人已发布的物品、已关注的用户。也可以对个人的密码和基本信息进行修改。
-1.界面设计
-    个人中心界面如图5-13所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/10.png" width="150" height="225" /> 
-    修改密码界面如图5-14所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/11.png" width="150" height="225" /> 
-    修改密码界面如图5-15所示
-    <img src="https://github.com/zhoujingfu/Secondhand-Shop/blob/master/weixin/img/12.png" width="150" height="225" /> 
-2.个人中心的核心代码
-密码修改核心代码：
-    post('/user/update/' + this.data.uid, formData).then((res) => {
+    个人中心界面如图
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/10.png
+    修改密码界面如图
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/11.png
+    修改密码界面
+    https://github.com/zhoujingfu/Secondhand-Shop/weixin/img/12.png
+#### 密码修改核心代码:
+```javascript
+ post('/user/update/' + this.data.uid, formData).then((res) => {
       if (res.statusCode == '200') {
         wx.hideLoading()
              wx.showToast({
@@ -109,8 +201,10 @@ serachUsers: function(e) {
           }
         }) 
       }
-信息修改核心代码：
-       post('/user/update/' + this.data.uid, formData).then((res) => {
+```
+#### 信息修改核心代码:
+```javascript
+post('/user/update/' + this.data.uid, formData).then((res) => {
       wx.showLoading({
         mask: true
       })
@@ -124,337 +218,4 @@ serachUsers: function(e) {
       }
       });
      }
- 
->>>>>>> 3e47155f3d84065e05374f07cb9f2bbc95705a9b
-
-### 系统主要工鞥
-这是一段普通的文本
-### 单行文本
-    Hello,大家好，我是果冻虾仁。
-在一行开头加入1个Tab或者4个空格。
-### 文本块
-#### 语法1
-在连续几行的文本开头加入1个Tab或者4个空格。
-
-    欢迎到访
-    很高兴见到您
-    祝您，早上好，中午好，下午好，晚安
-
-#### 语法2
-使用一对各三个的反引号：
 ```
-欢迎到访
-我是C++码农
-你可以在知乎、CSDN、简书搜索【果冻虾仁】找到我
-```
-该语法也可以实现代码高亮，见[代码高亮](#代码高亮)
-### 文字高亮
-文字高亮功能能使行内部分文字高亮，使用一对反引号。
-语法：
-```
-`linux` `网络编程` `socket` `epoll` 
-```
-效果：`linux` `网络编程` `socket` `epoll`
-
-也适合做一篇文章的tag
-#### 换行
-直接回车不能换行，  
-可以在上一行文本后面补两个空格，  
-这样下一行的文本就换行了。
-
-或者就是在两行文本直接加一个空行。
-
-也能实现换行效果，不过这个行间距有点大。
-#### 斜体、粗体、删除线
-
-|语法|效果|
-|----|-----|
-|`*斜体1*`|*斜体1*|
-|`_斜体2_`| _斜体2_|
-|`**粗体1**`|**粗体1**|
-|`__粗体2__`|__粗体2__|
-|`这是一个 ~~删除线~~`|这是一个 ~~删除线~~|
-|`***斜粗体1***`|***斜粗体1***|
-|`___斜粗体2___`|___斜粗体2___|
-|`***~~斜粗体删除线1~~***`|***~~斜粗体删除线1~~***|
-|`~~***斜粗体删除线2***~~`|~~***斜粗体删除线2***~~|
-
-    斜体、粗体、删除线可混合使用
-
-图片
-------
-基本格式：
-```
-![alt](URL title)
-```
-alt和title即对应HTML中的alt和title属性（都可省略）：
-- alt表示图片显示失败时的替换文本
-- title表示鼠标悬停在图片时的显示文本（注意这里要加引号）
-
-URL即图片的url地址，如果引用本仓库中的图片，直接使用**相对路径**就可了，如果引用其他github仓库中的图片要注意格式，即：`仓库地址/raw/分支名/图片路径`，如：
-```
-https://github.com/guodongxiaren/ImageCache/raw/master/Logo/foryou.gif
-```
-
-|#|语法|效果|
-|---|---|----
-|1|`![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")`|![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")
-|2|`![][code-past]`|![][code-past]
-
-注意例2的写法使用了**URL标识符**的形式，在[链接](#链接)一节有介绍。
->在文末有code-past的定义：
-```
-[code-past]:https://img-blog.csdnimg.cn/201908060004034.png
-```
-
-链接
-------
-### 链接外部URL
-
-|#|语法|效果|
-|---|----|-----|
-|1|`[我的博客](http://blog.csdn.net/guodongxiaren "悬停显示")`|[我的博客](http://blog.csdn.net/guodongxiaren "悬停显示")|
-|2|`[我的知乎][zhihu] `|[我的知乎][zhihu] |
-
-语法2由两部分组成：
-- 第一部分使用两个中括号，[ ]里的标识符（本例中zhihu），可以是数字，字母等的组合，标识符上下对应就行了（**姑且称之为URL标识符**）
-- 第二部分标记实际URL。
-
->使用URL标识符能达到复用的目的，一般把全文所有的URL标识符统一放在文章末尾，这样看起来比较干净。
->>URL标识符是我起的名字，不知道是否准确。囧。。
-
-### 链接本仓库里的URL
-
-|语法|效果|
-|----|-----|
-|`[我的简介](/example/profile.md)`|[我的简介](/example/profile.md)|
-|`[example](./example)`|[example](./example)|
-
-### 图片链接
-给图片加链接的本质是混合图片显示语法和普通的链接语法。普通的链接中[ ]内部是链接要显示的文本，而图片链接[ ]里面则是要显示的图片。  
-直接混合两种语法当然可以，但是十分啰嗦，为此我们可以使用URL标识符的形式。
-
-|#|语法|效果|
-|---|----|:---:|
-|1|`[![weibo-logo]](http://weibo.com/linpiaochen)`|[![weibo-logo]](http://weibo.com/linpiaochen)|
-|2|`[![](/img/zhihu.png "我的知乎，欢迎关注")][zhihu]`|[![](/img/zhihu.png "我的知乎，欢迎关注")][zhihu]|
-|3|`[![csdn-logo]][csdn]`|[![csdn-logo]][csdn]|
-
-因为图片本身和链接本身都支持URL标识符的形式，所以图片链接也可以很简洁（见例3）。  
-注意，此时鼠标悬停时显示的文字是图片的title，而非链接本身的title了。
-> 本文URL标识符都放置于文末
-
-### 锚点
-其实呢，每一个标题都是一个锚点，和HTML的锚点（`#`）类似，比如我们 
-
-|语法|效果|
-|---|---|
-|`[回到顶部](#readme)`|[回到顶部](#readme)|
-
-不过要注意，标题中的英文字母都被转化为**小写字母**了。
-> 以前GitHub对中文支持的不好，所以中文标题不能正确识别为锚点，但是现在已经没问题啦！
-
-## 列表
-### 无序列表
-#### 语法
-```
-* 昵称：果冻虾仁
-- 别名：隔壁老王
-* 英文名：Jelly
-```
-#### 效果
-* 昵称：果冻虾仁
-- 别名：隔壁老王
-* 英文名：Jelly
-
-### 多级无序列表
-#### 语法
-```
-* 编程语言
-    * 脚本语言
-        * Python
-```
-#### 效果
-* 编程语言
-    * 脚本语言
-        * Python
-
-### 一级有序列表
-#### 语法
-就是在数字后面加一个点，再加一个空格。不过看起来起来可能不够明显。 
-```
-面向对象的三个基本特征：
-
-1. 封装
-2. 继承
-3. 多态
-```
-
-#### 效果
-面向对象的三个基本特征：
-
-1. 封装
-2. 继承
-3. 多态
-
-
-### 多级有序列表
-和无序列表一样，有序列表也有多级结构。
-#### 语法
-```
-1. 这是一级的有序列表，数字1还是1
-   1. 这是二级的有序列表，阿拉伯数字在显示的时候变成了罗马数字
-      1. 这是三级的有序列表，数字在显示的时候变成了英文字母
-```
-
-#### 效果
-
-1. 这是一级的有序列表，数字1还是1
-   1. 这是二级的有序列表，阿拉伯数字在显示的时候变成了罗马数字
-      1. 这是三级的有序列表，数字在显示的时候变成了英文字母
-	 
-
-### 复选框列表
-#### 语法
-```
-- [x] 需求分析
-- [x] 系统设计
-- [x] 详细设计
-- [ ] 编码
-- [ ] 测试
-- [ ] 交付
-```
-#### 效果
-
-- [x] 需求分析
-- [x] 系统设计
-- [x] 详细设计
-- [ ] 编码
-- [ ] 测试
-- [ ] 交付
-
-您可以使用这个功能来标注某个项目各项任务的完成情况。
-> Tip:
->> 在GitHub的**issue**中使用该语法是可以实时点击复选框来勾选或解除勾选的，而无需修改issue原文。
-
-## 块引用
-
-### 常用于引用文本
-#### 文本摘自《深入理解计算机系统》P27
-　令人吃惊的是，在哪种字节顺序是合适的这个问题上，人们表现得非常情绪化。实际上术语“little endian”（小端）和“big endian”（大端）出自Jonathan Swift的《格利佛游记》一书，其中交战的两个派别无法就应该从哪一端打开一个半熟的鸡蛋达成一致。因此，争论沦为关于社会政治的争论。只要选择了一种规则并且始终如一的坚持，其实对于哪种字节排序的选择都是任意的。
-> **“端”（endian）的起源**  
-以下是Jonathan Swift在1726年关于大小端之争历史的描述：  
-“……下面我要告诉你的是，Lilliput和Blefuscu这两大强国在过去36个月里一直在苦战。战争开始是由于以下的原因：我们大家都认为，吃鸡蛋前，原始的方法是打破鸡蛋较大的一端，可是当今的皇帝的祖父小时候吃鸡蛋，一次按古法打鸡蛋时碰巧将一个手指弄破了，因此他的父亲，当时的皇帝，就下了一道敕令，命令全体臣民吃鸡蛋时打破较小的一端，违令者重罚。”
-
-### 块引用有多级结构
-#### 语法
-```
-> 数据结构
->> 树
->>> 二叉树
->>>> 平衡二叉树
->>>>> 满二叉树
-```
-#### 效果
-> 数据结构
->> 树
->>> 二叉树
->>>> 平衡二叉树
->>>>> 满二叉树
-
-代码高亮
-----------
-
-### 语法
-在三个反引号后面加上编程语言的名字，另起一行开始写代码，最后一行再加上三个反引号。
-
-### 效果
-```Java
-public static void main(String[]args){} //Java
-```
-```c
-int main(int argc, char *argv[]) //C
-```
-```Bash
-echo "hello GitHub" #Bash
-```
-```javascript
-document.getElementById("myH1").innerHTML="Welcome to my Homepage"; //javascipt
-```
-```cpp
-string &operator+(const string& A,const string& B) //cpp
-```
-表格
---------
-
-表头1  | 表头2|
---------- | --------|
-表格单元  | 表格单元 |
-表格单元  | 表格单元 |
-
-| 表头1  | 表头2|
-| ---------- | -----------|
-| 表格单元   | 表格单元   |
-| 表格单元   | 表格单元   |
-
-### 对齐
-表格可以指定对齐方式
-
-| 左对齐 | 居中  | 右对齐 |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
-
-### 混合其他语法
-表格单元中的内容可以和其他大多数GFM语法配合使用，如：  
-#### 使用普通文本的删除线，斜体等效果
-
-| 名字 | 描述 |
-| ------------- | ----------- |
-| Help      | ~~Display the~~ help window.|
-| Close     | _Closes_ a window     |
-
-#### 表格中嵌入图片（链接）
-其实前面介绍图片显示、图片链接的时候为了清晰就是放在在表格中显示的。
-
-| 图片 | 描述 |
-| ---- | ---- |
-|![baidu][baidu-logo] | 百度|
-
-表情
-----------
-Github的Markdown语法支持添加emoji表情，输入不同的符号码（两个冒号包围的字符）可以显示出不同的表情。
-
-比如`:blush:`，可以显示:blush:。
-
-具体每一个表情的符号码，可以查询GitHub的官方网页[http://www.emoji-cheat-sheet.com](http://www.emoji-cheat-sheet.com)。
-
-但是这个网页每次都打开**奇慢**。。所以我整理到了本repo中，大家可以直接在此查看[emoji](./emoji.md)。
-
-diff语法
----------
-版本控制的系统中都少不了diff的功能，即展示一个文件内容的增加与删除。
-GFM中可以显示的展示diff效果。使用绿色表示新增，红色表示删除。
-#### 语法
-其语法与代码高亮类似，只是在三个反引号后面写diff，
-并且其内容中，可以用 `+ `开头表示新增，`- `开头表示删除。
-另外还有有 `!`和`#`的语法。
-
-#### 效果
-
-```diff
-+ 人闲桂花落，
-- 夜静春山空。
-! 月出惊山鸟，
-# 时鸣春涧中。
-```
-
---------------------------------
-[csdn]:http://blog.csdn.net/guodongxiaren "我的博客"
-[zhihu]:https://www.zhihu.com/people/jellywong "我的知乎，欢迎关注"
-[weibo]:http://weibo.com/linpiaochen
-[baidu-logo]:http://www.baidu.com/img/bdlogo.gif "百度logo"
-[weibo-logo]:/img/weibo.png "点击图片进入我的微博"
-[csdn-logo]:/img/csdn.png "我的CSDN博客"
-[code-past]:https://img-blog.csdnimg.cn/201908060004034.png
