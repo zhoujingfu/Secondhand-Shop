@@ -1,0 +1,44 @@
+<!--pages/index/goods/goods.wxml-->
+<view>
+  <view class='page_row1' >
+    <view class="search">
+      <view class="df search_arr">
+        <icon class="searchcion" size='13' type='search'></icon>
+        <input value='{{nickName}}' bindconfirm="serachGoods"  placeholder="请输入关键字" />
+      </view>  
+    </view>  
+    <view class='sousuo' bindtap='goCancel'>取消</view>
+  </view>
+   
+  <scroll-view scroll-y class='scroll-view' bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+    <view wx:for="{{goodsList}}" wx:for-item="goods" wx:key="index">
+      <view id="" class="goods" data-id="{{goods.id}}" bindtap="goodsDetails">
+        <view class='user'>
+          <view class='user-image-info'>
+            <image class="user-image" src="{{goods.user.avatarUrl}}" />
+          </view>
+          <view class='user-info'>
+            <view class='user-name-tr'>
+              <view class='user-name'>{{goods.user.nickName}}</view>
+              <view class='price'>￥{{goods.price}}</view>
+            </view>
+            <view class='timestamp'>{{goods.bulletinDate}}</view>
+            <view class="clear" style='clear: both;'></view>
+          </view>
+        </view>
+        <view class='images-list'>
+          <view class='showPic' style='background:white'>
+            <view wx:for="{{goods.good_attachments}}" wx:for-item="image" wx:key="index" class="previewimg">
+              <image mode='aspectFill' class='image' src="{{image.attachmentUrl}}" data-src="{{image.attachmentUrl}}"></image>
+            </view>
+          </view>
+          <view class="clear" style='clear: both;'></view>
+        </view>
+        <view class='dec'>
+          <span style='font-weight:bold'>{{goods.goodsName}} </span>{{goods.spec}}
+        </view>
+        <view class="clear" style='clear: both;'></view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

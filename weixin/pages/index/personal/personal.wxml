@@ -1,0 +1,37 @@
+<scroll-view scroll-y="true">
+  <view class="graySpace"></view>
+  <view class="item-avatar-lg">
+    <image src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <view class="text_box padding" style='padding-left:10rpx;'>
+      <view class="flex">
+        <!-- <text class="title">{{userInfo.nickName}}</text> -->
+        <text class="title">{{userForm.username}}</text>
+        <view>
+          <image class='gender'  wx:if="{{userInfo.gender == 1}}" src="../../images/boy.png" />
+          <image class='gender' wx:elif="{{userInfo.gender == 0}}" src="../../images/girl.png" />
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{role == 1}}">
+    <view class="graySpace"></view>
+    <view class="item-avatar-xs" data-url="../userAdmin/userAdmin" bindtap="goPage">
+      <!-- <image src="../../images/user-controller.png" /> -->
+      <image src="../../images/11.png" />
+      <view style="padding-left:10px">
+        <text class="title">用户管理</text>
+      </view>
+    </view>
+  </view>
+  <view wx:for="{{list}}" wx:key="index" wx:for-item="item">
+    <view class="graySpace"></view>
+    <view class="item-avatar-xs" wx:for="{{item.list_tool}}" wx:key="index" wx:for-item="i" data-log="{{i.name}}" data-url="{{i.url}}" bindtap="goPage">
+      <image src="{{i.img}}" />
+      <view style="padding-left:10px">
+        <text class="title">{{i.name}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<!-- 自定义tabbar -->
+<!-- <tabbar tabbar="{{tabbar}}"></tabbar> -->

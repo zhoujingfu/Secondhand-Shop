@@ -1,0 +1,7 @@
+/* pages/index/personal/personal.wxss */
+.gender {
+  width: 30rpx !important;
+  height: 30rpx !important;
+  margin:12rpx 10rpx 0rpx 10rpx;
+
+}

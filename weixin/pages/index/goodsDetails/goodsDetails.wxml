@@ -1,0 +1,129 @@
+<!--pages/index/goods/goods.wxml-->
+<view>
+  <scroll-view scroll-y class='scroll-view' bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+    <view id="" class="goods">
+      <view class='user'>
+        <view class='user-image-info'>
+          <image class="user-image" src="{{goodsDetails.user.avatarUrl}}" />
+        </view>
+        <view class='user-info'>
+          <view class='user-name-tr'>
+            <view class='user-name'>{{goodsDetails.user.nickName}}</view>
+            <view class='type'>{{goodsDetails.type}}</view>
+          </view>
+          <view class='timestamp'>{{goodsDetails.bulletinDate}}</view>
+          <view class="clear" style='clear: both;'></view>
+        </view>
+      </view>
+      <view class='price'>￥{{goodsDetails.price}}
+        <span class='originalPrice'>￥{{goodsDetails.originalPrice}}</span>
+      </view>
+      <view class='dec'>
+        <span style='font-weight:bold'>{{goodsDetails.goodsName}} </span>{{goodsDetails.spec}}
+      </view>
+      <view class='images-list'>
+        <view class='showPic' style='background:white'>
+          <view wx:for="{{goodsDetails.good_attachments}}" wx:for-item="image" wx:key="index" class="previewimg">
+            <image mode='widthFix' class='image' src="{{image.attachmentUrl}}" data-src="{{image.attachmentUrl}}"></image>
+          </view>
+          <view class="clear" style='clear: both;'></view>
+        </view>
+        <view class="clear" style='clear: both;'></view>
+      </view>
+      <view class='comment'>
+        <view class='comment-title'>评论列表</view>
+        <view wx:for="{{goodsComments}}" wx:for-item="goodsComment" wx:key="index">
+          <view data-commentId='{{goodsComment.id}}' data-replyId='{{goodsComment.commentUser.id}}' data-nickName='{{goodsComment.commentUser.nickName}}' bindlongtap='deleteReply' bindtap="bindReply" style='display:block'>
+            <view class='firstComment'>
+              <view>
+                <view class='user-image-info-left'>
+                  <image class="user-image" src="{{goodsComment.commentUser.avatarUrl}}" />
+                </view>
+                <view class='user-right'>
+                  <view class='user-name-tr'>
+                    <view class='user-name-left'>{{goodsComment.commentUser.nickName}}</view>
+                  </view>
+                  <view class='comment-date'>{{goodsComment.commentDate}}</view>
+
+
+
+          
+                </view>
+                <view class="clear" style='clear: both;'></view>
+              </view>
+
+              <view class='content'>{{goodsComment.content}}</view>
+            </view>
+          </view>
+
+          <view wx:for="{{goodsComment.list}}" wx:for-item="replyComment" wx:key="index">
+            <view class='secondComment' data-commentId='{{replyComment.id}}' data-replyId='{{replyComment.commentUser.id}}' data-nickName='{{replyComment.commentUser.nickName}}' bindlongtap='deleteReply' bindtap="bindReply">
+              <view>
+                <view class='user-image-info-left'>
+                  <image class="user-image" src="{{replyComment.commentUser.avatarUrl}}" />
+                </view>
+                <view class='user-right'>
+                  <view class='user-name-tr'>
+                    <view class='user-name-left'>{{replyComment.commentUser.nickName}}</view>
+                  </view>
+                  <view class='comment-date'>{{replyComment.commentDate}}</view>
+
+
+                </view>
+                <view class="clear" style='clear: both;'></view>
+              </view>
+              <view class='content'>回复
+                <span class='reply'>@{{replyComment.replyUser.nickName}}</span>：{{replyComment.content}}</view>
+            </view>
+          </view>
+
+        </view>
+      </view>
+    </view>
+  
+     <form bindsubmit="replyCommentHandler">
+      <view class="release" hidden="{{!releaseFocus}}">
+     
+       <textarea class="text" name='content' value='{{content}}' placeholder-class="input_null" fixed="true" maxlength="-1" show-confirm-bar="false" cursor-spacing="15" auto-height="true" focus="{{releaseFocus}}" placeholder="回复@ {{releaseName}}"></textarea>
+        <button class="submit" formType="submit">发送</button>      
+      </view>
+      </form>
+  </scroll-view>
+
+      
+
+  <view class='downButton'>
+    <ul>
+      <li class="downButtonLi">
+      
+        <view class='itemli' bindtap="home" >
+        <view class="scan">
+        <image bindtap='messege' class="scan" src="../../images/home.png" mode="aspectFit"/>
+       </view>
+       <span class="uptext"  >主页</span>
+     </view>
+
+     <view class='itemli' data-commentId='' data-replyId='{{goodsDetails.user.id}}' data-nickName='{{goodsDetails.user.nickName}}'  bindtap="bindReply" >
+       <view class="scan"  >
+      <image bindtap='messege' class="scan" src="../../images/mes.png" mode="aspectFit" />
+       </view>
+    <span class="uptext" >评论</span>
+    </view>
+  </li>
+  
+      <li class="downButtonLi1" wx:if="{{uid == goodsDetails.user.id}}">
+        <view class='itemli1' bindtap='moreOperation'>
+     <view class="right-text" >出示二维码</view>
+        </view>
+        <view class='itemli2'>
+     <view class="right-text" bindtap='deleteOperation'>删除</view>
+        </view>
+      </li>
+      <li class="downButtonLi1" wx:if="{{ role == 1}}">
+        <view class='itemli3'>
+     <view class="right-text" bindtap='deleteOperation'>删除</view>
+        </view>
+      </li>
+    </ul>
+  </view>
+</view>

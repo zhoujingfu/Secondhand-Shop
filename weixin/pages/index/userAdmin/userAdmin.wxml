@@ -1,0 +1,52 @@
+<!--pages/index/statistics/statistics.wxml-->
+<view>
+  <!-- 新的搜索框 -->
+  <view class='page_row1' >
+    <view class="search">
+      <view class="df search_arr">
+        <icon class="searchcion" size='13' type='search'></icon>
+        <input value='{{nickName}}' bindconfirm="serachUsers"  placeholder="请输入关键字" />
+      </view>
+    </view>
+    <view class='sousuo' bindtap='goCancel'>取消</view>
+  </view>
+
+
+   <view class='content'>
+    <view wx:for="{{allUsers}}" wx:for-item="item" wx:key="index">
+        <view class='scorll' bindtap="">
+          <view>
+            <view class='user-image-info-left'>
+              <image class="user-image" src="{{item.avatarUrl}}" />
+            </view>
+            <view class='user-right'>
+              <view class='user-name-tr'>
+                <view class='user-name-left'>{{item.nickName}}</view>
+              </view>
+              <view class='comment-date'>
+                <image class='gender' wx:if="{{item.gender == 1}}" src="../../images/boy.png" />
+                <image class='gender' wx:elif="{{item.gender == 0}}" src="../../images/girl.png" />
+              </view>
+            </view>
+            <view class='user-add'>
+              <!-- <view> -->
+              <view class='state' wx:if="{{item.state == 0}}" data-message='禁用状态' data-id='{{item.id}}' data-state='1' bindtap='userAdmin'>正常状态 </view>
+              <view class='state-a' wx:elif="{{item.state == 1}}" data-message='正常状态' data-id='{{item.id}}' data-state='0' bindtap='userAdmin' >禁用状态</view>
+              <!-- </view> -->
+            </view>
+            <view class="clear" style='clear: both;'></view>
+          </view>
+        </view>
+      </view>
+
+   
+   
+   </view>
+  
+
+
+
+
+
+
+</view>

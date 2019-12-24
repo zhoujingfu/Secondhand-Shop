@@ -1,0 +1,2 @@
+<!--pages/index/error/error.wxml-->
+<view class='error'>对不起，你的账户涉嫌违规，已被停止使用；如非本人操作，请联系管理员<span style='color:#2BB453'>1751218699@qq.com</span>申诉</view>

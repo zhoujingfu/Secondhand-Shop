@@ -1,0 +1,67 @@
+<view class="page">
+  <view class="page__bd">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">用户名</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入用户名" name="username" value="{{userForm.username}}" bindblur="userNameChange" />
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">密码</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input password type="text" class="weui-input" placeholder="请输入密码" name="password" value="{{userForm.password}}" bindblur="userPasswordChange" />
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">确认密码</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input password type="text" class="weui-input" placeholder="请再次输入密码" name="rePassword" value="{{userForm.rePassword}}" bindblur="userPasswordChange" />
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">电话</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input type="number" class="weui-input" placeholder="请输入电话" name="mobile" value="{{userForm.mobile}}" bindblur="userPasswordChange" />
+          </view>
+        </view> 
+                <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">学号</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input type="number" class="weui-input" placeholder="请输入学号" name="qq" value="{{userForm.qq}}" bindblur="userPasswordChange" />
+          </view>
+        </view>
+      </view>
+      <text class='text'>手持学生证半身照</text>
+       <view class="section" style='border-top:1px solid #eee'>
+        <view class='showPic' style='background:white'>
+
+          <view wx:for="{{imagesList}}" wx:for-item="image" wx:key="index" class="previewimg1">
+            <image class='image1' src="{{image}}" data-src="{{image}}" bindtap="previewImage"  name="proof" value="{{userForm.proof}}"></image>
+          </view>
+            
+           <view class="previewimg" hidden="{{flag}}"  bindtap='chooseImage'>
+          
+           <image class='image' src="../../images/add.jpg" bindtap=""></image>
+          </view>
+          <view class="clear" style='clear: both;'></view>
+        </view>
+      </view>
+    
+      <view class="weui-btn-area" bindtap="showLive">
+        <button class="weui-btn" formType="submit" type="primary">注册</button>
+      </view>
+    </form>
+  </view>
+</view>

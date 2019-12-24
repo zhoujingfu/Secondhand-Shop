@@ -1,0 +1,6 @@
+
+<view class='qr'>
+<view>{{goodsName}}</view>
+<image src="{{qrcode}}" class="qrcode"></image>
+</view>
+  

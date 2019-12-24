@@ -1,0 +1,18 @@
+/* pages/index/activity/activity.wxss */
+.artice {
+  padding: 10rpx;
+}
+.title {
+  color: #11CD6E;
+  text-align: center;
+}
+.content { 
+  font-size:30rpx;
+line-height:60rpx;
+margin-bottom:20rpx;
+
+}
+
+.content-image {
+   width:100%;
+}

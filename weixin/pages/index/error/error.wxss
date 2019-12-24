@@ -1,0 +1,9 @@
+/* pages/index/error/error.wxss */
+page{
+  background-color: #FCFCFC
+}
+.error {
+  font-size: 30rpx;
+  padding:10rpx;
+
+}

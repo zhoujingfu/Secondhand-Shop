@@ -1,0 +1,87 @@
+/**index.wxss**/
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: red;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+/* pages/index/publishGoods/publishGoods.wxss */
+.loadpic{
+  margin: 20px auto;
+  width: 500rpx;
+  height: 80rpx;
+  background: #d34c17;
+  text-align: center;
+  color: white;
+  line-height: 80rpx;
+}
+.previewimg{
+ 
+  padding: 10rpx;
+ 
+  float: left;
+  background: white;
+}
+.image{
+  display: block;
+  height: 200rpx;
+  width: 200rpx;
+}
+
+.text{
+  margin-left: 30rpx;
+}
+.previewimg1{
+  /* height: 300rpx; */
+  padding: 10rpx;
+  float: left;
+  background: white;
+}
+.image1{
+  display: block;
+  width: 200rpx;
+  height: 200rpx;
+}
+.showPic{
+  margin: 0 auto;
+  width: 90%;
+}
+.price{
+  float: left;
+}
+.section1{
+  margin-top: 20rpx;
+}
+.input1{
+  height: 90rpx;
+  font-size: 35rpx;
+}
+.down{
+height: 100rpx;
+background:white; 
+}
+.downButton{
+  width: 90%; 
+  height:90rpx;
+  position: fixed;
+  margin:auto;
+  left:0; 
+  right:0; 
+  bottom:60rpx;
+  background:white;
+  z-index: 100;
+  text-align:center;
+}

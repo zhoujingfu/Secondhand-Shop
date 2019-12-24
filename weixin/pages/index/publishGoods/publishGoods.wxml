@@ -1,0 +1,60 @@
+<!--pages/index/publishGoods/publishGoods.wxml-->
+<view class="main">
+   <!-- 选择图片 -->
+   <view class="section" style='border-top:1px solid #eee'>
+        <view class='showPic' style='background:white'>
+
+          <view wx:for="{{imagesList}}" wx:for-item="image" wx:key="index" class="previewimg1">
+            <image class='image1' src="{{image}}" data-src="{{image}}" bindtap="previewImage"></image>
+          </view>
+
+           <view class="previewimg" hidden="{{flag}}"  bindtap='chooseImage'>
+            <image class='image' src="../../images/add-img.png" bindtap=""></image><text class='text'>添加图片</text>
+          </view>
+          
+          <view class="clear" style='clear: both;'></view>
+        </view>
+      </view>
+    
+  <form bindsubmit="formSubmit" bindreset="formReset">
+    <view class='content' style='margin-bottom:100rpx;'>
+    <view class='section1'>
+      <view class="section">
+        <!-- <view class="section__title">商品名称</view> -->
+        <input  class="input1" name="goodsName" placeholder="" value='{{goodsForm.goodsName}}' focus="true" placeholder="在此填写宝贝名称，如“闲置鼠标” "/>
+      </view>
+      </view>
+      <view class="section">
+        <!-- <view class="section__title">描述</view> -->
+        <textarea  style='font-size: 35rpx;' name="spec" value='{{goodsForm.spec}}' placeholder="在此描述你的物品：如品牌，规格，成色等" />
+      </view>
+      <view class="section">
+        <ul>
+          <li class="price" style="width:50%;">
+            <view class="section__title" style="float:left;margin-right:10rpx">价格 (¥)</view>
+            <input type="digit" name="price" value='{{goodsForm.price}}' placeholder="" />
+          </li>
+          <li style="width:50%;">
+            <view class="section__title" style="float:left">原价 (¥)</view>
+            <input type="digit" name="originalPrice" value='{{goodsForm.originalPrice}}' placeholder="" />
+          </li>
+        </ul>
+      </view>
+    
+      <view class="section">
+        <!-- <view class="section__title">普通选择器</view> -->
+        <picker name='type' bindchange="bindPickerChange" value="{{goodsForm.index}}" range="{{typeList}}">
+          <view class="picker" >
+            类别 {{typeList[index]}}
+          </view>
+        </picker>
+      </view>
+      <view class="clear" style='clear: both;'></view>
+       <view class="down"></view>
+    </view>
+   
+    <view class='downButton'>
+      <button style='color：#eee' type="primary" formType="submit" size="default">上架物品</button>
+    </view>
+  </form>
+</view>

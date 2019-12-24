@@ -1,0 +1,10 @@
+/* pages/index/qr/qr.wxss */
+.qr {
+  width: 100%;
+  text-align: center;
+}
+.qrcode {
+  width:500rpx;
+ height:500rpx;
+
+}
